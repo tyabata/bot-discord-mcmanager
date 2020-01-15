@@ -13,7 +13,7 @@ client = discord.Client()
 @client.event
 async def on_ready():
     channel = client.get_channel(CHANNEL_ID)
-    await channel.send('bot起動! : 使い方は @kodaking_bot help で聞いてね')
+    await channel.send('bot起動! : 使い方は @manager_bot help で聞いてね')
 
 #
 # やりとり
@@ -39,6 +39,11 @@ async def on_message(data):
 
         if text == 'stop':
             await gcp.stopServer()
+            return
+        if text == 'request':
+            await data.add_reaction("👍")
+            await data.pin()
+            await reply.sendPinnedAfterMessage(data)
             return
 
         # 未対応のメンションに対しての返信
