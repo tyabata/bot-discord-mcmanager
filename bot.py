@@ -33,24 +33,31 @@ async def on_message(data):
             await reply.sendHelpMessage(data)
             return
 
-        if text == 'start':
-            await gcp.startServer()
-            return
+        elif text == 'start':
+            # サーバ起動
+            result = gcp.startServer()
+            await reply.sendStartServerMessage(data, result)
 
-        if text == 'stop':
-            await gcp.stopServer()
-            return
-        if text == 'request':
+        elif text == 'stop':
+            # サーバ停止
+            result = gcp.stopServer()
+            await reply.sendStopServerMessage(data, result)
+        
+        elif text == 'state':
+            result = gcp.getServerState()
+            await reply.sendServerInfo(data, result)
+    
+        elif text == 'request':
+            # 機能要望など
             await data.add_reaction("👍")
             await data.pin()
             await reply.sendPinnedAfterMessage(data)
-            return
+        
+        else:
+            # 未対応のメンションに対しての返信
+            await reply.sendOtherMessage(data)
 
-        # 未対応のメンションに対しての返信
-        await reply.sendOtherMessage(data)
-
-    # other
-
+    # メンションつき以外は基本無視
 
 # 起動
 client.run(TOKEN)
